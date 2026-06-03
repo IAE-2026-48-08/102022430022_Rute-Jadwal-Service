@@ -36,10 +36,15 @@ Karena proyek ini menggunakan lingkungan Docker, pastikan aplikasi *local server
    ```bash
 docker compose up -d
 ```
+
+
 2. **Jalankan Migrasi & Seeder Database:**
    ```bash
 docker compose exec laravel.test php artisan migrate:fresh --seed
 ```
+
+
+
 3. **Generate Ulang Dokumentasi Swagger (Wajib):**
    ```bash
 docker compose exec laravel.test php artisan l5-swagger:generate
