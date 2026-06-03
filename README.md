@@ -32,21 +32,18 @@ Layanan ini telah memenuhi Standard Integration Contract (IAE-T2) dengan mengimp
 
 Karena proyek ini menggunakan lingkungan Docker, pastikan aplikasi *local server* (seperti Laragon/XAMPP) **dimatikan** agar port 80 dan 3306 tidak mengalami bentrok.
 
-1. **Jalankan Mesin Container Docker:**
-   ```bash
+**1. Jalankan Mesin Container Docker:**
+```bash
 docker compose up -d
 ```
 
-
-2. **Jalankan Migrasi & Seeder Database:**
-   ```bash
+**2. Jalankan Migrasi & Seeder Database:**
+```bash
 docker compose exec laravel.test php artisan migrate:fresh --seed
 ```
 
-
-
-3. **Generate Ulang Dokumentasi Swagger (Wajib):**
-   ```bash
+**3. Generate Ulang Dokumentasi Swagger (Wajib):**
+```bash
 docker compose exec laravel.test php artisan l5-swagger:generate
 ```
 
