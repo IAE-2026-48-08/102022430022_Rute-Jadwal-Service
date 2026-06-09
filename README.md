@@ -1,4 +1,4 @@
-# Rute & Jadwal Service API 🚌
+# Rute & Jadwal Service API 
 
 Mini-service ini dikembangkan untuk mengelola data jadwal keberangkatan dan rute transportasi publik. Proyek ini merupakan bagian dari ekosistem *Enterprise* dan ditujukan untuk memenuhi **Tugas 2 - Integrasi Aplikasi Enterprise (IAE)**.
 
@@ -9,17 +9,17 @@ Mini-service ini dikembangkan untuk mengelola data jadwal keberangkatan dan rute
 
 ---
 
-## 🚀 Fitur Utama
+##  Fitur Utama
 
 Layanan ini telah memenuhi Standard Integration Contract (IAE-T2) dengan mengimplementasikan berbagai protokol komunikasi modern dan standar arsitektur *deployment* industri:
 
-1. **Containerized Environment (Docker) 🐳:**
+1. **Containerized Environment (Docker) :**
    Berjalan sepenuhnya di dalam *container* menggunakan Laravel Sail untuk menjamin konsistensi *environment* pengembangan.
 2. **REST API (JSON Wrapper):**
    Menyediakan 3 endpoint utama dengan format respons terstandarisasi (200 OK, 201 Created, 404 Not Found).
 3. **Keamanan via API Key & Data Protection:**
    Seluruh endpoint diproteksi menggunakan Header Authentication dengan key `X-IAE-KEY`. Sistem juga dilindungi dari eksploitasi kerentanan *Mass Assignment*.
-4. **Automated Data Seeding 🌱:**
+4. **Automated Data Seeding :**
    Database terotomatisasi dengan *dummy data* rute dan jadwal untuk kemudahan pengujian.
 5. **Dokumentasi OpenAPI/Swagger:**
    Antarmuka interaktif UI (L5-Swagger) untuk menguji REST API secara langsung.
@@ -28,7 +28,7 @@ Layanan ini telah memenuhi Standard Integration Contract (IAE-T2) dengan mengimp
 
 ---
 
-## 💻 Cara Menjalankan Service (Dockerized)
+##  Cara Menjalankan Service (Dockerized)
 
 Karena proyek ini menggunakan lingkungan Docker, pastikan aplikasi *local server* (seperti Laragon/XAMPP) **dimatikan** agar port 80 dan 3306 tidak mengalami bentrok.
 
@@ -49,7 +49,7 @@ docker compose exec laravel.test php artisan l5-swagger:generate
 
 ---
 
-## 🌐 Akses Layanan & Playground
+##  Akses Layanan & Playground
 
 Layanan berjalan di *port* standar (80). Silakan akses URL berikut melalui *browser*:
 
@@ -70,7 +70,7 @@ Semua *request* wajib menyertakan header `X-IAE-KEY` yang diisi dengan NIM penga
 
 ---
 
-## ⚙️ Kueri GraphQL
+##  Kueri GraphQL
 
 Sistem mendukung fleksibilitas pengambilan *field* data melalui GraphiQL Playground.
 
@@ -91,7 +91,7 @@ query {
 ---
 ---
 
-# 📊 Lampiran: AI Usage & Prompt Engineering Report
+#  Lampiran: AI Usage & Prompt Engineering Report
 *Laporan Analitik Penggunaan AI dalam Pengembangan Modul Rute & Jadwal*
 
 ## 1. Ringkasan Umum Percakapan
@@ -148,5 +148,5 @@ Aktivitas yang terekam berfokus pada stabilitas sistem dan integrasi infrastrukt
 * **Technical Depth:** Menunjukkan transisi kompetensi menuju level *Advanced*. Penggalian struktur operasional Docker serta kepekaan dalam menyikapi parameter pemblokiran injeksi data pada *framework* menunjukkan pola pikir berbasis *Software Engineering* terapan.
 * **Problem Solving:** Bergerak dengan orientasi hasil (*Action-oriented*). Setiap *output code* yang diberikan segera dieksekusi dalam *container*, divalidasi respons HTTP-nya (mulai dari analisis transisi 404, ke 500, hingga 200/201), lalu ditarik kembali kesimpulannya.
 
-### 🌟 Rekomendasi Resolusi (High-Impact Prompt)
+###  Rekomendasi Resolusi (High-Impact Prompt)
 * **Kasus Resolusi Mass Assignment (Prompt #10):** Evaluasi *Exception Request Payload* menunjukkan bahwa dokumentasi UI telah dimanfaatkan secara maksimal sebagai medium *penetration test*. Diagnosis yang cermat atas pesan penolakan *framework* memantik diskusi teknis krusial mengenai urgensi penerapan keamanan input data pada arsitektur perangkat lunak.
