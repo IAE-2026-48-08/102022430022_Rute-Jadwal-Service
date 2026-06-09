@@ -82,7 +82,7 @@ Aktivitas yang terekam berfokus pada stabilitas sistem dan integrasi infrastrukt
 * **Tingkat Technical Depth:** Transisi dari tingkat Menengah ke *Advanced*. Keberanian mengulik Docker dan memahami bagaimana Laravel memblokir injeksi data massal menunjukkan insting seorang *Software Engineer* dan fondasi dasar *Cyber Security* yang kuat.
 * **Pola Problem Solving:** *Action-oriented*. Setiap solusi yang diberikan AI langsung dieksekusi, diuji coba lewat Swagger, dan jika ada respons kode HTTP yang berbeda (dari 404 ke 500, lalu ke 200/201), pengguna langsung memvalidasi kembali ke AI.
 
-### 🌟 High-Impact & Best Prompts
+###  High-Impact & Best Prompts
 
 * **[Best Prompt] Prompt #10 (Error 500 pada eksekusi POST):** *(Mengunggah hasil eksekusi Swagger yang menampilkan respons "Add [route] to fillable property...")*
     * *Alasan:* Prompt ini membuktikan bahwa dokumentasi Swagger berfungsi dengan baik sebagai alat *testing*. Pengguna tidak panik melihat *error* 500, melainkan dengan tenang menelusuri pesan internal framework, yang berujung pada pemahaman fitur keamanan esensial (*Mass Assignment*).
