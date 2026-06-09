@@ -19,22 +19,16 @@
                 ],
                 "summary": "Mengambil daftar rute dan jadwal",
                 "operationId": "e8a7715efdd9c1d13650dda726065bc4",
-                "parameters": [
-                    {
-                        "name": "X-IAE-KEY",
-                        "in": "header",
-                        "description": "NIM Mahasiswa",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "Berhasil mengambil data"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ]
             },
             "post": {
                 "tags": [
@@ -42,17 +36,6 @@
                 ],
                 "summary": "Mendaftarkan jadwal armada baru",
                 "operationId": "3a2079f068d082e4b1bdb4ac69b5cbfa",
-                "parameters": [
-                    {
-                        "name": "X-IAE-KEY",
-                        "in": "header",
-                        "description": "NIM Mahasiswa",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -92,7 +75,12 @@
                     "201": {
                         "description": "Jadwal berhasil ditambahkan"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ]
             }
         },
         "/api/v1/schedules/{id}": {
@@ -111,15 +99,6 @@
                         "schema": {
                             "type": "integer"
                         }
-                    },
-                    {
-                        "name": "X-IAE-KEY",
-                        "in": "header",
-                        "description": "NIM Mahasiswa",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
                     }
                 ],
                 "responses": {
@@ -129,7 +108,22 @@
                     "404": {
                         "description": "Resource not found"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "ApiKeyAuth": {
+                "type": "apiKey",
+                "description": "Masukkan NIM Anda (contoh: 102022430022) sebagai API Key",
+                "name": "X-IAE-KEY",
+                "in": "header"
             }
         }
     },

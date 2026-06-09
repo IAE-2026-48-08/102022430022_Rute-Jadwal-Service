@@ -13,6 +13,13 @@ use OpenApi\Attributes as OA;
     url: "http://localhost",
     description: "Local Docker Server"
 )]
+#[OA\SecurityScheme(
+    securityScheme: "ApiKeyAuth",
+    type: "apiKey",
+    in: "header",
+    name: "X-IAE-KEY",
+    description: "Masukkan NIM Anda (contoh: 102022430022) sebagai API Key"
+)]
 abstract class Controller
 {
     // Class bawaan Laravel

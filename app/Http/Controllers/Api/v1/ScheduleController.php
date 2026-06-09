@@ -13,15 +13,7 @@ class ScheduleController extends Controller
         path: '/api/v1/schedules',
         summary: 'Mengambil daftar rute dan jadwal',
         tags: ['Schedules'],
-        parameters: [
-            new OA\Parameter(
-                name: 'X-IAE-KEY',
-                description: 'NIM Mahasiswa',
-                in: 'header',
-                required: true,
-                schema: new OA\Schema(type: 'string')
-            )
-        ],
+        security: [["ApiKeyAuth" => []]],
         responses: [
             new OA\Response(response: 200, description: 'Berhasil mengambil data')
         ]
@@ -45,15 +37,7 @@ class ScheduleController extends Controller
         path: '/api/v1/schedules',
         summary: 'Mendaftarkan jadwal armada baru',
         tags: ['Schedules'],
-        parameters: [
-            new OA\Parameter(
-                name: 'X-IAE-KEY',
-                description: 'NIM Mahasiswa',
-                in: 'header',
-                required: true,
-                schema: new OA\Schema(type: 'string')
-            )
-        ],
+        security: [["ApiKeyAuth" => []]],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
@@ -89,6 +73,7 @@ class ScheduleController extends Controller
         path: '/api/v1/schedules/{id}',
         summary: 'Mengambil detail informasi jadwal spesifik',
         tags: ['Schedules'],
+        security: [["ApiKeyAuth" => []]],
         parameters: [
             new OA\Parameter(
                 name: 'id',
@@ -96,13 +81,6 @@ class ScheduleController extends Controller
                 in: 'path',
                 required: true,
                 schema: new OA\Schema(type: 'integer')
-            ),
-            new OA\Parameter(
-                name: 'X-IAE-KEY',
-                description: 'NIM Mahasiswa',
-                in: 'header',
-                required: true,
-                schema: new OA\Schema(type: 'string')
             )
         ],
         responses: [
