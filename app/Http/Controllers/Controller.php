@@ -20,6 +20,13 @@ use OpenApi\Attributes as OA;
     name: "X-IAE-KEY",
     description: "Masukkan NIM Anda (contoh: 102022430022) sebagai API Key"
 )]
+#[OA\SecurityScheme(
+    securityScheme: "bearerAuth",
+    type: "http",
+    scheme: "bearer",
+    bearerFormat: "JWT",
+    description: "Token JWT dari SSO IAE. Ambil lewat POST /api/v1/auth/token."
+)]
 abstract class Controller
 {
     // Class bawaan Laravel

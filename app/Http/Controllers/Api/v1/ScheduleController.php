@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
 use OpenApi\Attributes as OA;
+use App\Services\Iae\IaeAuditClient;
+use App\Services\Iae\IaePublisher;
 
 class ScheduleController extends Controller
 {
@@ -13,7 +15,7 @@ class ScheduleController extends Controller
         path: '/api/v1/schedules',
         summary: 'Mengambil daftar rute dan jadwal',
         tags: ['Schedules'],
-        security: [["ApiKeyAuth" => []]],
+        security: [["bearerAuth" => []]],
         responses: [
             new OA\Response(response: 200, description: 'Berhasil mengambil data')
         ]
@@ -37,7 +39,7 @@ class ScheduleController extends Controller
         path: '/api/v1/schedules',
         summary: 'Mendaftarkan jadwal armada baru',
         tags: ['Schedules'],
-        security: [["ApiKeyAuth" => []]],
+        security: [["bearerAuth" => []]],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
@@ -54,26 +56,63 @@ class ScheduleController extends Controller
             new OA\Response(response: 201, description: 'Jadwal berhasil ditambahkan')
         ]
     )]
-    public function store(Request $request)
+
+    public function store(Request $request, IaeAuditClient $audit, IaePublisher $publisher)
     {
         $schedule = Schedule::create($request->all());
 
+        $receipt = null;
+        try {
+            $result = $audit->audit('ScheduleCreated', [
+                'event'          => 'schedule.created',
+                'schedule_id'    => $schedule->id,
+                'route'          => $schedule->route,
+                'departure_time' => $schedule->departure_time,
+                'price'          => $schedule->price,
+                'actor'          => $request->attributes->get('iae_subject'),
+            ]);
+            $receipt = $result['receipt'];
+        } catch (\Throwable $e) {
+            report($e);
+        }
+
+        try {
+            $publisher->publish([
+                'event_name'            => 'schedule.created',
+                'service_name'          => 'Rute-Jadwal-Service',
+                'api_version'           => 'v1',
+                'occurred_at'           => now()->toIso8601String(),
+                'schedule_id'           => $schedule->id,
+                'route'                 => $schedule->route,
+                'departure_time'        => $schedule->departure_time,
+                'price'                 => $schedule->price,
+                'legacy_receipt_number' => $receipt,
+                'approved_by'           => [
+                    'sso_subject' => $request->attributes->get('iae_subject'),
+                    'roles'       => $request->attributes->get('iae_roles', []),
+                ],
+            ]);
+        } catch (\Throwable $e) {
+            report($e);
+        }
+
         return response()->json([
-            'status' => 'success',
+            'status'  => 'success',
             'message' => 'Jadwal berhasil ditambahkan',
-            'data' => $schedule,
-            'meta' => [
-                'service_name' => 'Rute-Jadwal-Service',
-                'api_version' => 'v1'
-            ]
-        ], 201); 
+            'data'    => $schedule,
+            'meta'    => [
+                'service_name'  => 'Rute-Jadwal-Service',
+                'api_version'   => 'v1',
+                'audit_receipt' => $receipt,
+            ],
+        ], 201);
     }
 
     #[OA\Get(
         path: '/api/v1/schedules/{id}',
         summary: 'Mengambil detail informasi jadwal spesifik',
         tags: ['Schedules'],
-        security: [["ApiKeyAuth" => []]],
+        security: [["bearerAuth" => []]],
         parameters: [
             new OA\Parameter(
                 name: 'id',
