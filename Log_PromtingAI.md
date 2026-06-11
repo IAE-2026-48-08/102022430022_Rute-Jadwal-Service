@@ -97,3 +97,45 @@ Aktivitas yang terekam berfokus pada stabilitas sistem dan integrasi infrastrukt
 * **Rekomendasi Next Step:**
     1. Melakukan *Commit & Push* ke repositori Git organisasi untuk menyimpan *milestone* arsitektur Docker ini.
     2. Mulai merancang spesifikasi GraphQL *Mutations* (untuk fungsionalitas CRUD tingkat lanjut) dengan mengadopsi pola dari kodingan proyek sejenis.
+
+
+
+# Log Prompting AI — Tugas 3
+
+**Service:** Rute & Jadwal (`102022430022_Rute-Jadwal-Service`) — TEAM-12
+**AI:** Claude (Anthropic)
+**Topik:** Integrasi service ke SSO (JWT), Audit SOAP, dan Message Broker RabbitMQ.
+
+> AI dipakai sebagai asisten eksplorasi teknis. Setiap kode diuji, dipahami, dan disesuaikan sendiri di lingkungan lokal sebelum dipakai.
+
+---
+
+## 1. Memahami kebutuhan Tugas 3
+**Prompt (inti):** Pahami dokumen Tugas 3 + infrastruktur pusat (SSO/SOAP/RabbitMQ); jelaskan masing-masing dan bagaimana repo antar-anggota "digabungkan".
+**Bantuan AI:** Menjelaskan bahwa repo tidak dilebur, melainkan terhubung lewat 3 layanan pusat (SSO=identitas, SOAP=audit, RabbitMQ=event). Memetakan bobot (SSO 30%, SOAP 40%, RabbitMQ 20%, Log 10%, analisis 33%) dan urutan kerja SSO → SOAP → RabbitMQ.
+**Pemahaman:** Konsep integrasi enterprise: identitas terpusat, audit legacy, messaging async.
+
+## 2. Modul 1 — Federated SSO (JWT)
+**Prompt (inti):** Buatkan middleware verifikasi JWT dari SSO + pemetaan user ke tabel role lokal.
+**Bantuan AI:** Penjelasan JWT (header.payload.signature, RS256, JWKS); middleware `VerifyIaeJwt` (ambil JWKS, verifikasi tanda tangan via `firebase/php-jwt`, baca `sso_subject` & `roles`); migration + model `SsoUser`; penyesuaian routes/bootstrap/services/Swagger.
+**Kendala & solusi (debug mandiri):** `sail` tak jalan di PowerShell → pakai PHP native (Laragon); `DB_HOST=mysql` gagal native → `127.0.0.1`; field token = `token`; TeamID = TEAM-12 ditemukan dari klaim token.
+**Hasil:** Tanpa token → 401; dengan token → 200; user tercatat di `sso_users`.
+
+## 3. Modul 2 — SOAP XML Client
+**Prompt (inti):** SOAP client: ubah JSON → XML Envelope, kirim ke `/soap/v1/audit`, simpan `ReceiptNumber`.
+**Bantuan AI:** `IaeTokenService` (token M2M) + `IaeAuditClient` (bangun Envelope TeamID/ActivityName/LogContent, parse `ReceiptNumber`); migration + model `AuditLog`; strategi uji terpisah via tinker sebelum disambung ke controller.
+**Hasil:** Balasan `SUCCESS` + `ReceiptNumber`, tersimpan di `audit_logs`, dipicu dari `POST /schedules`.
+
+## 4. Modul 3 — AMQP Publisher (RabbitMQ)
+**Prompt (inti):** Publisher kirim event JSON ke `/api/v1/messages/publish`.
+**Bantuan AI:** `IaePublisher` (kirim event Bearer ke exchange `iae.central.exchange`); uji terpisah dulu.
+**Kendala & solusi:** Publish awal 400 "message is required" → event dibungkus `{ "message": ... }`.
+**Hasil:** Status 200; event `schedule.created` tampil di `/board` (TEAM-12) membawa `legacy_receipt_number` + `approved_by.sso_subject`.
+
+## 5. Integrasi & Verifikasi Akhir
+**Prompt (inti):** Sambungkan SOAP + RabbitMQ ke `POST /schedules` agar satu transaksi memicu ketiganya.
+**Kendala & solusi:** POST sempat 500 karena import `IaePublisher` belum ada → ditambahkan, lalu sukses.
+**Hasil:** Satu `POST /schedules` → verifikasi JWT → simpan jadwal → audit SOAP → publish event → muncul utuh di `/board`.
+
+## Refleksi
+AI mempercepat penulisan boilerplate dan menjelaskan konsep (JWT/JWKS, SOAP Envelope, pub/sub). Bagian terpenting—menjalankan, menguji per langkah, dan men-debug masalah lingkungan (Windows/Docker/DB, kontrak API, dependency injection)—dikerjakan dan dipahami sendiri. Pola "uji terpisah dulu, baru integrasikan" terbukti efektif menemukan masalah lebih awal.

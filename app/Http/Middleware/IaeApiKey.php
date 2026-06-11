@@ -10,7 +10,7 @@ class IaeApiKey
 {
     public function handle(Request $request, Closure $next)
     {
-        // Menggunakan SI4808 sebagai contoh NIM, sesuaikan dengan NIM aslimu yang berupa angka
+
         $nim = '102022430022';
 
         if ($request->header('X-IAE-KEY') !== $nim) {

@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Mendaftarkan alias middleware IAE
         $middleware->alias([
             'iae.apikey' => \App\Http\Middleware\IaeApiKey::class,
+            'iae.jwt'    => \App\Http\Middleware\VerifyIaeJwt::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

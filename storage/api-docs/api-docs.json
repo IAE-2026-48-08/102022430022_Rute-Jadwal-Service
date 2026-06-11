@@ -26,7 +26,7 @@
                 },
                 "security": [
                     {
-                        "ApiKeyAuth": []
+                        "bearerAuth": []
                     }
                 ]
             },
@@ -78,7 +78,7 @@
                 },
                 "security": [
                     {
-                        "ApiKeyAuth": []
+                        "bearerAuth": []
                     }
                 ]
             }
@@ -111,7 +111,7 @@
                 },
                 "security": [
                     {
-                        "ApiKeyAuth": []
+                        "bearerAuth": []
                     }
                 ]
             }
@@ -124,6 +124,12 @@
                 "description": "Masukkan NIM Anda (contoh: 102022430022) sebagai API Key",
                 "name": "X-IAE-KEY",
                 "in": "header"
+            },
+            "bearerAuth": {
+                "type": "http",
+                "description": "Token JWT dari SSO IAE. Ambil lewat POST /api/v1/auth/token.",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
             }
         }
     },
