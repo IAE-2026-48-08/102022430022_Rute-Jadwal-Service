@@ -38,7 +38,3 @@ Modul 2 (SOAP). Saya minta bantuan membuat client yang mengubah JSON menjadi XML
 Modul 3 (RabbitMQ). Saya minta dibuatkan publisher untuk mengirim event JSON. Saat pertama dites malah error 400 karena format payload-nya kurang pas — setelah event-nya saya bungkus ulang, schedule.created berhasil terkirim dan muncul di board pusat bersama receipt number-nya.
 
 Penggabungan dan penyesuaian. Terakhir, saya gabungkan audit SOAP dan RabbitMQ ke dalam satu proses POST saat jadwal baru dibuat. Sempat error 500 karena saya lupa meng-import class publisher, tapi setelah diperbaiki, sekali submit langsung berjalan semuanya: validasi JWT, simpan jadwal, kirim audit SOAP, lalu publish event. Belakangan ada dua tambahan: dosen mewajibkan token M2M menyertakan field nim, jadi saya perbarui agar mengirim api_key dan nim; serta event saya yang tadinya tidak berlabel di board saya beri routing key supaya muncul label schedule.created.
-
-## Penutup
-
-Secara keseluruhan, AI sangat membantu untuk menulis kode dasar dan menjelaskan teori. Tapi untuk urusan menyesuaikan port, mengatasi error environment Windows, dan mencari letak bug saat integrasi, semuanya tetap saya telusuri sendiri. Buat saya, menguji setiap fitur satu per satu sebelum digabung adalah cara paling ampuh supaya tidak pusing saat error muncul.
