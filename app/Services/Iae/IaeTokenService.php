@@ -15,9 +15,10 @@ class IaeTokenService
             $res = Http::asJson()->timeout(10)
                 ->post($base.'/api/v1/auth/token', [
                     'api_key' => config('services.iae.api_key'),
+                    'nim'     => config('services.iae.nim'),
                 ])->throw()->json();
 
-            return $res['token'];   
+            return $res['token'];
         });
     }
 }

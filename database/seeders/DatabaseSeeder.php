@@ -16,13 +16,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Data bawaan Laravel
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
-
-        // Data Dummy Rute & Jadwal dengan format DATETIME yang benar
         Schedule::create([
             'route' => 'Bandung (Leuwi Panjang) - Jakarta (Kampung Rambutan)',
             'departure_time' => '2026-06-05 08:00:00',
