@@ -29,5 +29,5 @@ use OpenApi\Attributes as OA;
 )]
 abstract class Controller
 {
-    // Class bawaan Laravel
+    
 }

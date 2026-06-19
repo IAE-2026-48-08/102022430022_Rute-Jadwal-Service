@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Schedule extends Model
 {
     use HasFactory;
-
-    // Tambahkan baris ini untuk mengizinkan input data
     protected $fillable = [
         'route',
         'departure_time',

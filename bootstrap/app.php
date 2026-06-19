@@ -8,12 +8,11 @@ use Illuminate\Http\Request;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
-        api: __DIR__.'/../routes/api.php', // Pastikan ini ada jika menggunakan install:api
+        api: __DIR__.'/../routes/api.php',
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // Mendaftarkan alias middleware IAE
         $middleware->alias([
             'iae.apikey' => \App\Http\Middleware\IaeApiKey::class,
             'iae.jwt'    => \App\Http\Middleware\VerifyIaeJwt::class,

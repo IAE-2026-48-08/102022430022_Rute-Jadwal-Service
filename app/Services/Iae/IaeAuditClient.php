@@ -9,9 +9,6 @@ class IaeAuditClient
 {
     public function __construct(private IaeTokenService $tokens) {}
 
-    /**
-     * Kirim audit ke SOAP pusat. Return: ['receipt' => ?string, 'status' => int, 'raw' => string]
-     */
     public function audit(string $activityName, array $logContent): array
     {
         $base   = rtrim(config('services.iae.sso_url'), '/');

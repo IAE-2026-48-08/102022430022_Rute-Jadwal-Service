@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('activity_name');
             $table->string('team_id')->nullable();
             $table->json('payload')->nullable();
-            $table->string('receipt_number')->nullable(); // ReceiptNumber dari dosen
+            $table->string('receipt_number')->nullable();
             $table->timestamps();
         });
     }
