@@ -21,6 +21,10 @@ class IaeApiKey
             ], 401);
         }
 
+        // Set request attributes to mock SSO/JWT attributes for downstream compatibility (SOAP audit, RabbitMQ event logging)
+        $request->attributes->set('iae_subject', $nim);
+        $request->attributes->set('iae_roles', ['student']);
+
         return $next($request);
     }
 }

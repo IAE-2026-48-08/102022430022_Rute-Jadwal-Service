@@ -12,7 +12,7 @@ class IaeTokenService
         return Cache::remember('iae_m2m_token', 3000, function () {
             $base = rtrim(config('services.iae.sso_url'), '/');
 
-            $res = Http::asJson()->timeout(10)
+            $res = Http::asForm()->timeout(10)
                 ->post($base.'/api/v1/auth/token', [
                     'api_key' => config('services.iae.api_key'),
                     'nim'     => config('services.iae.nim'),

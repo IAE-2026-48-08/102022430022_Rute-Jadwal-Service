@@ -19,12 +19,12 @@ Service ini menyediakan tiga endpoint REST untuk rute & jadwal. Sejak Tugas 3, a
 - Audit SOAP. Saat jadwal dibuat, datanya diubah menjadi SOAP Envelope (XML) dan dikirim ke layanan audit pusat; nomor resi yang dikembalikan disimpan di tabel `audit_logs`.
 - Publish RabbitMQ. Event `schedule.created` disiarkan ke exchange `iae.central.exchange` dengan routing key `schedule.created`, agar bisa dikonsumsi service lain.
 - REST API dengan format respons standar (200, 201, 404).
-- Dokumentasi Swagger (L5-Swagger) dengan skema keamanan `bearerAuth`.
+- Dokumentasi Swagger (L5-Swagger) dengan skema keamanan `ApiKeyAuth`.
 - GraphiQL Playground untuk kueri data.
 
 ## Endpoint
 
-Semua endpoint membutuhkan header `Authorization: Bearer <JWT>`.
+Semua endpoint membutuhkan header `X-IAE-KEY: 102022430022`.
 
 - `GET /api/v1/schedules` — mengambil semua rute & jadwal
 - `GET /api/v1/schedules/{id}` — mengambil detail satu jadwal
@@ -32,24 +32,25 @@ Semua endpoint membutuhkan header `Authorization: Bearer <JWT>`.
 
 ## Cara Menjalankan
 
-Di lingkungan saya, PHP dijalankan secara native (Laragon) dan MySQL lewat Docker.
+### Opsi A — Docker (disarankan, sesuai kriteria penilaian)
 
-1. Nyalakan container MySQL:
+Cukup satu perintah. Image akan build sendiri, menjalankan `composer install`, migrasi, dan seed data contoh secara otomatis:
 ```
-   docker compose up -d
+   docker compose up --build
 ```
-2. Salin `.env.example` menjadi `.env`, lalu sesuaikan minimal:
-```
-   DB_HOST=127.0.0.1
-   IAE_SSO_URL=https://iae-sso.virtualfri.id
-   IAE_API_KEY=<api key kamu>
-   IAE_NIM=<nim kamu>
-   IAE_TEAM_ID=TEAM-12
-```
-3. Install dependency dan jalankan migrasi:
+- Service: http://localhost:8000 (Swagger: `/api/documentation`, GraphiQL: `/graphiql`)
+- MySQL berjalan di container `db`, diekspos ke host pada port `3307` agar tidak bentrok dengan MySQL Laragon.
+- Menghentikan: `Ctrl+C` lalu `docker compose down` (tambahkan `-v` untuk menghapus data DB).
+
+### Opsi B — Native (Laragon)
+
+1. Pastikan MySQL Laragon aktif, lalu buat database `transportasi_2`.
+2. Salin `.env.example` menjadi `.env`, sesuaikan `DB_*` dan `IAE_*`.
+3. Install dependency dan siapkan database:
 ```
    composer install
-   php artisan migrate
+   php artisan key:generate
+   php artisan migrate --seed
 ```
 4. Jalankan server:
 ```
@@ -59,17 +60,12 @@ Di lingkungan saya, PHP dijalankan secara native (Laragon) dan MySQL lewat Docke
 
 ## Mengakses API
 
-Karena endpoint butuh JWT, ambil token dulu dari SSO pusat lalu pakai sebagai Bearer token.
+Untuk mengakses API, masukkan API Key Anda (`102022430022`) pada header `X-IAE-KEY`.
 
-Ambil token (contoh akun warga):
-```
-POST https://iae-sso.virtualfri.id/api/v1/auth/token
-{ "email": "<email>", "password": "<password>" }
-```
-Token berada di field `token`. Setelah itu panggil API:
+Contoh pemanggilan API:
 ```
 GET http://127.0.0.1:8000/api/v1/schedules
-Authorization: Bearer <token>
+X-IAE-KEY: 102022430022
 ```
 
 Dokumentasi interaktif tersedia di Swagger (`/api/documentation`) dan GraphiQL (`/graphiql`).

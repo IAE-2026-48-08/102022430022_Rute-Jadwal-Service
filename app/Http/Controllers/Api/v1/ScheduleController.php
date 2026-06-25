@@ -15,7 +15,7 @@ class ScheduleController extends Controller
         path: '/api/v1/schedules',
         summary: 'Mengambil daftar rute dan jadwal',
         tags: ['Schedules'],
-        security: [["bearerAuth" => []]],
+        security: [["ApiKeyAuth" => []]],
         responses: [
             new OA\Response(response: 200, description: 'Berhasil mengambil data')
         ]
@@ -39,7 +39,7 @@ class ScheduleController extends Controller
         path: '/api/v1/schedules',
         summary: 'Mendaftarkan jadwal armada baru',
         tags: ['Schedules'],
-        security: [["bearerAuth" => []]],
+        security: [["ApiKeyAuth" => []]],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
@@ -112,7 +112,7 @@ class ScheduleController extends Controller
         path: '/api/v1/schedules/{id}',
         summary: 'Mengambil detail informasi jadwal spesifik',
         tags: ['Schedules'],
-        security: [["bearerAuth" => []]],
+        security: [["ApiKeyAuth" => []]],
         parameters: [
             new OA\Parameter(
                 name: 'id',

@@ -10,8 +10,8 @@ use OpenApi\Attributes as OA;
     title: "Rute & Jadwal Service API"
 )]
 #[OA\Server(
-    url: "http://localhost",
-    description: "Local Docker Server"
+    url: "http://localhost:8000",
+    description: "Local Development Server"
 )]
 #[OA\SecurityScheme(
     securityScheme: "ApiKeyAuth",
@@ -19,13 +19,6 @@ use OpenApi\Attributes as OA;
     in: "header",
     name: "X-IAE-KEY",
     description: "Masukkan NIM Anda (contoh: 102022430022) sebagai API Key"
-)]
-#[OA\SecurityScheme(
-    securityScheme: "bearerAuth",
-    type: "http",
-    scheme: "bearer",
-    bearerFormat: "JWT",
-    description: "Token JWT dari SSO IAE. Ambil lewat POST /api/v1/auth/token."
 )]
 abstract class Controller
 {

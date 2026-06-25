@@ -7,8 +7,8 @@
     },
     "servers": [
         {
-            "url": "http://localhost",
-            "description": "Local Docker Server"
+            "url": "http://localhost:8000",
+            "description": "Local Development Server"
         }
     ],
     "paths": {
@@ -26,7 +26,7 @@
                 },
                 "security": [
                     {
-                        "bearerAuth": []
+                        "ApiKeyAuth": []
                     }
                 ]
             },
@@ -78,7 +78,7 @@
                 },
                 "security": [
                     {
-                        "bearerAuth": []
+                        "ApiKeyAuth": []
                     }
                 ]
             }
@@ -111,7 +111,7 @@
                 },
                 "security": [
                     {
-                        "bearerAuth": []
+                        "ApiKeyAuth": []
                     }
                 ]
             }
@@ -124,12 +124,6 @@
                 "description": "Masukkan NIM Anda (contoh: 102022430022) sebagai API Key",
                 "name": "X-IAE-KEY",
                 "in": "header"
-            },
-            "bearerAuth": {
-                "type": "http",
-                "description": "Token JWT dari SSO IAE. Ambil lewat POST /api/v1/auth/token.",
-                "bearerFormat": "JWT",
-                "scheme": "bearer"
             }
         }
     },
