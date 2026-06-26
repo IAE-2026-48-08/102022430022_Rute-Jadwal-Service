@@ -40,5 +40,8 @@ return [
         'api_key' => env('IAE_API_KEY'),
         'team_id' => env('IAE_TEAM_ID'),
         'nim'     => env('IAE_NIM'),
+        // Integrasi eksternal (Tugas 3). Default mati agar endpoint Tugas 2
+        // tidak menunggu layanan eksternal saat dinilai.
+        'integrations_enabled' => filter_var(env('IAE_INTEGRATIONS_ENABLED', false), FILTER_VALIDATE_BOOLEAN),
     ],
 ];

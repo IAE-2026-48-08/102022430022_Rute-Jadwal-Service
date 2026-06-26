@@ -4,24 +4,25 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class IaeApiKey
 {
     public function handle(Request $request, Closure $next)
     {
+        // Sesuai IAE-T2: Header X-IAE-KEY berisi NIM mahasiswa.
+        $nim = (string) (config('services.iae.nim') ?: '102022430022');
 
-        $nim = '102022430022';
+        $provided = (string) $request->header('X-IAE-KEY', '');
 
-        if ($request->header('X-IAE-KEY') !== $nim) {
+        if ($provided === '' || $provided !== $nim) {
             return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized: Invalid API Key',
-                'errors' => null
+                'status'  => 'error',
+                'message' => 'Unauthorized: Invalid or missing X-IAE-KEY',
+                'errors'  => null,
             ], 401);
         }
 
-        // Set request attributes to mock SSO/JWT attributes for downstream compatibility (SOAP audit, RabbitMQ event logging)
+        // Atribut untuk kompatibilitas downstream (audit SOAP, event RabbitMQ).
         $request->attributes->set('iae_subject', $nim);
         $request->attributes->set('iae_roles', ['student']);
 

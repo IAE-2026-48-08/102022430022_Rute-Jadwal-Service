@@ -2,7 +2,6 @@
 .gitignore
 vendor
 node_modules
-.env
 .env.backup
 storage/logs/*.log
 public/build

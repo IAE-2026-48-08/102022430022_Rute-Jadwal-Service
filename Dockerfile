@@ -1,16 +1,16 @@
 # Dockerfile — Rute & Jadwal Service
-# Image mandiri (tanpa Laravel Sail): "composer install" dijalankan DI DALAM build,
-# sehingga tidak bergantung pada folder vendor/ di host (penyebab gagal sebelumnya).
+# Image mandiri: "composer install" dijalankan DI DALAM build, dan database
+# memakai SQLite (file-based) sehingga tidak ada dependency container DB.
 FROM php:8.3-cli
 
-# Dependency sistem + ekstensi PHP yang dibutuhkan Laravel & MySQL
+# Dependency sistem + ekstensi PHP yang dibutuhkan Laravel & SQLite
 RUN apt-get update && apt-get install -y --no-install-recommends \
         git \
         unzip \
         libzip-dev \
         libonig-dev \
-        default-mysql-client \
-    && docker-php-ext-install pdo_mysql mbstring zip bcmath \
+        libsqlite3-dev \
+    && docker-php-ext-install pdo_sqlite mbstring zip bcmath \
     && rm -rf /var/lib/apt/lists/*
 
 # Composer dari image resmi
@@ -18,12 +18,13 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Salin source code
+# Salin source code (termasuk .env yang ikut di-commit)
 COPY . .
 
-# Siapkan .env untuk proses build (package:discover), lalu install dependency
-RUN cp .env.example .env \
-    && composer install --no-interaction --prefer-dist --optimize-autoloader
+# Pastikan .env tersedia (fallback ke template bila .env tidak ada),
+# lalu install dependency.
+RUN if [ ! -f .env ]; then cp .env.example .env; fi
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
 # Pastikan entrypoint berakhiran LF + executable (hindari error CRLF dari Windows)
 RUN sed -i 's/\r$//' docker/entrypoint.sh \
