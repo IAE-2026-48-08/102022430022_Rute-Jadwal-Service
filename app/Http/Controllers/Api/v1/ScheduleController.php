@@ -12,7 +12,7 @@ use App\Services\Iae\IaePublisher;
 class ScheduleController extends Controller
 {
     #[OA\Get(
-        path: '/api/v1/user',
+        path: '/api/v1/schedules',
         summary: 'Mengambil daftar rute dan jadwal (collection)',
         tags: ['Schedules'],
         security: [["ApiKeyAuth" => []]],
@@ -37,7 +37,7 @@ class ScheduleController extends Controller
     }
 
     #[OA\Post(
-        path: '/api/v1/user',
+        path: '/api/v1/schedules',
         summary: 'Mendaftarkan jadwal armada baru (action)',
         tags: ['Schedules'],
         security: [["ApiKeyAuth" => []]],
@@ -121,7 +121,7 @@ class ScheduleController extends Controller
     }
 
     #[OA\Get(
-        path: '/api/v1/user/{id}',
+        path: '/api/v1/schedules/{id}',
         summary: 'Mengambil detail informasi jadwal spesifik (resource)',
         tags: ['Schedules'],
         security: [["ApiKeyAuth" => []]],
