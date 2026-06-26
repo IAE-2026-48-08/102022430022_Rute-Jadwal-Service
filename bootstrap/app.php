@@ -19,7 +19,32 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->shouldRenderJsonWhen(
-            fn (Request $request) => $request->is('api/*'),
-        );
+        $exceptions->render(function (\Throwable $e, Request $request) {
+            if ($request->is('api/*')) {
+                $statusCode = 500;
+                $message = $e->getMessage();
+
+                if ($e instanceof \Symfony\Component\HttpKernel\Exception\HttpExceptionInterface) {
+                    $statusCode = $e->getStatusCode();
+                } elseif ($e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+                    $statusCode = 404;
+                    $message = 'Resource not found';
+                }
+
+                // Default messages for common status codes
+                if (empty($message)) {
+                    if ($statusCode === 404) {
+                        $message = 'Resource not found';
+                    } else {
+                        $message = 'An error occurred';
+                    }
+                }
+
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $message,
+                    'errors' => null
+                ], $statusCode);
+            }
+        });
     })->create();
