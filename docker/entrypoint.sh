@@ -7,9 +7,9 @@ cd /var/www/html
 [ -f .env ] || cp .env.example .env
 
 # Sesuaikan file .env di dalam container untuk lingkungan Docker
-sed -i "s/DB_HOST=.*/DB_HOST=db/g" .env
-sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=rootpassword/g" .env
-sed -i "s/DB_DATABASE=.*/DB_DATABASE=102022430022_rute_jadwal_service/g" .env
+sed -i "s/DB_HOST=.*/DB_HOST=${DB_HOST:-db}/g" .env
+sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${DB_PASSWORD:-rootpassword}/g" .env
+sed -i "s/DB_DATABASE=.*/DB_DATABASE=${DB_DATABASE:-102022430022_rute_jadwal_service}/g" .env
 
 # 2. Generate APP_KEY bila belum ada
 if ! grep -q '^APP_KEY=base64:' .env; then
